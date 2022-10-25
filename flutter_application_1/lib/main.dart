@@ -12,22 +12,39 @@ class MyApp extends StatefulWidget {
 }
 
 class MyAppState extends State<MyApp> {
+  var dynamicStrings = ['flutter', 'is', 'easy', 'and', 'awesome'];
+  var stringIndex = 0;
+
+  pressedButton() {
+    setState(() {
+      stringIndex = stringIndex + 1;
+      if (stringIndex > 4) {
+        stringIndex = 0;
+      }
+    });
+
+    print(stringIndex);
+    //print('button pressed');
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text('My First App'),
+          title: const Text('My First App'),
+          backgroundColor: Colors.blueGrey,
         ),
-        body: Column(
-          // ignore: prefer_const_literals_to_create_immutables
-          children: [
-            const Text("Hello World"),
-            const ElevatedButton(
-              onPressed: null,
-              child: Text("Press me"),
-            )
-          ],
+        body: Center(
+          child: Column(
+            children: [
+              Text(dynamicStrings[stringIndex]),
+              ElevatedButton(
+                onPressed: pressedButton,
+                child: Text("Press me"),
+              )
+            ],
+          ),
         ),
       ),
     );
