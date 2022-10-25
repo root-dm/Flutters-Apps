@@ -22,9 +22,6 @@ class MyAppState extends State<MyApp> {
         stringIndex = 0;
       }
     });
-
-    print(stringIndex);
-    //print('button pressed');
   }
 
   @override
@@ -32,18 +29,33 @@ class MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('My First App'),
-          backgroundColor: Colors.blueGrey,
+          title: const Text('Test app'),
+          backgroundColor: Colors.purple,
+          centerTitle: true,
         ),
-        body: Center(
-          child: Column(
-            children: [
-              Text(dynamicStrings[stringIndex]),
-              ElevatedButton(
-                onPressed: pressedButton,
-                child: Text("Press me"),
-              )
-            ],
+        body: Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage('assets/images/bg1.jpg'), fit: BoxFit.cover),
+          ),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  dynamicStrings[stringIndex],
+                  style: TextStyle(fontSize: 25),
+                ),
+                ElevatedButton(
+                  onPressed: pressedButton,
+                  child: Text("Press me"),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.pink,
+                    onPrimary: Colors.white,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
