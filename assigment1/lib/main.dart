@@ -9,13 +9,12 @@ void main() {
     initialRoute: '/splashscreen',
     routes: {
       '/': (context) => MyApp(), //οριζουμε τα μονοπατια NamedRoutes
-
       '/homepage': (context) => HomePage(),
       '/splashscreen': (context) => SplashScreen(),
-      '/cardpagepython': (context) => CardPagePython(),
-      '/cardpagejava': (context) => CardPageJava(),
-      '/cardpagecpp': (context) => CardPageCpp(),
-      '/cardpagejavascript': (context) => CardPageJavascript(),
+      '/cardpageheartbeat': (context) => CardPageHeartbeat(),
+      // '/cardpagejava': (context) => CardPageJava(),
+      // '/cardpagecpp': (context) => CardPageCpp(),
+      // '/cardpagejavascript': (context) => CardPageJavascript(),
     },
   ));
 }

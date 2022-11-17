@@ -1,5 +1,5 @@
 // ignore_for_file: prefer_const_constructors
-
+// @formatter:off
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -8,16 +8,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  var listImages = [
-    //η λιστα με τις εικονες που θα εμφανισουμε
-    'assets/images/py.png',
-    'assets/images/java.png',
-    'assets/images/js.png',
-    'assets/images/cpp.png'
-  ];
-
   Widget customcard(String langname, String value, String description,
-      IconData icon, String route) {
+      IconData icon, Color col, String route) {
     return Padding(
       padding: EdgeInsets.all(2.0),
       child: InkWell(
@@ -34,7 +26,7 @@ class _HomePageState extends State<HomePage> {
         },
         child: Card(
           //το wdiget Card
-          color: Colors.blue,
+          color: col,
           elevation: 10.0, //η σκια που θελουμε να φαινεται
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(25),
@@ -50,6 +42,9 @@ class _HomePageState extends State<HomePage> {
                 Center(
                   child: Row(
                     children: [
+                      Padding(
+                        padding: EdgeInsets.only(left: 15.0),
+                      ),
                       Icon(
                         icon,
                         size: 25,
@@ -58,7 +53,7 @@ class _HomePageState extends State<HomePage> {
                       Text(
                         langname, //δυναμικο κειμενο εικονας
                         style: TextStyle(
-                            fontSize: 20,
+                            fontSize: 17,
                             color: Colors.white,
                             fontWeight: FontWeight.bold),
                       ),
@@ -66,19 +61,19 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.only(top: 30.0),
+                  padding: EdgeInsets.only(top: 15.0),
                   child: Text(
-                    description,
+                    value,
                     style: TextStyle(
-                      fontSize: 18.0,
+                      fontSize: 40.0,
                       color: Colors.white,
+                      fontWeight: FontWeight.w900,
                     ),
-                    maxLines: 5,
                     textAlign: TextAlign.justify,
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.all(20.0),
+                  padding: EdgeInsets.all(5.0),
                   child: Text(
                     description,
                     style: TextStyle(
@@ -101,6 +96,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[800],
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -109,28 +105,51 @@ class _HomePageState extends State<HomePage> {
             padding: EdgeInsets.only(top: 30.0),
           ),
           Container(
-            padding: EdgeInsets.only(left: 10.0),
+            padding: EdgeInsets.all(15.0),
             child: Text(
               'Hello World',
               style: TextStyle(
                   fontSize: 24,
-                  color: Colors.blue,
+                  color: Colors.white,
                   fontWeight: FontWeight.bold),
             ),
           ),
           Container(
-            height: 220,
+            height: 180,
             child: ListView(
               scrollDirection: Axis.horizontal,
+              shrinkWrap: true,
               children: [
                 customcard("Heartbeat", "66", "bpm", Icons.heart_broken,
-                    '/cardpagepython'),
+                    Colors.blueAccent, '/cardpageheartbeat'),
                 customcard("Blood Pressure", '66/123', 'mm', Icons.bloodtype,
-                    '/cardpagejava'),
+                    Colors.amberAccent, '/cardpagejava'),
                 customcard("Activity", "6783", "steps", Icons.local_activity,
-                    '/cardpagejavascript'),
+                    Colors.pink, '/cardpagejavascript'),
               ],
             ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: 30.0),
+          ),
+          Column(
+            children: [
+              Text(
+                'YOUR DAILY INFORMATION',
+                style: TextStyle(
+                    fontSize: 15,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold),
+              ),
+              Container(
+                child: Card(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [],
+                  ),
+                ),
+              )
+            ],
           ),
         ],
       ),
