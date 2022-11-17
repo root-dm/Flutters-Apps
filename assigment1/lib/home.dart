@@ -125,7 +125,7 @@ class _HomePageState extends State<HomePage> {
               children: [
                 customcard("Heartbeat", "66", "bpm", Icons.heart_broken,
                     '/cardpagepython'),
-                customcard("Blood Pressure", '66/123', 'mmHG', Icons.bloodtype,
+                customcard("Blood Pressure", '66/123', 'mm', Icons.bloodtype,
                     '/cardpagejava'),
                 customcard("Activity", "6783", "steps", Icons.local_activity,
                     '/cardpagejavascript'),
