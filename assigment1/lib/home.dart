@@ -93,10 +93,93 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Widget customcard2(String langname, String imagepath, String route) {
+    return Padding(
+      padding: EdgeInsets.all(5.0),
+      child: InkWell(
+        child: Card(
+          //το wdiget Card
+          color: Colors.white,
+          elevation: 10.0, //η σκια που θελουμε να φαινεται
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ), //στρογγυλοποιηση γωνιών της κάρτας
+          child: ListTile(
+            contentPadding:
+                EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+            iconColor: Colors.black,
+            leading: Image(
+              width: 40, //να γεμιζει η εικονα τον χωρο
+              image: AssetImage(imagepath), //δυναμικο path εικονας
+            ),
+            title: Text(
+              langname,
+              style:
+                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+            ),
+            trailing: ElevatedButton(
+              onPressed: () {},
+              child: Icon(Icons.arrow_forward, color: Colors.blue),
+              style: ButtonStyle(
+                shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25.0))),
+                padding: MaterialStateProperty.all(
+                    EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10)),
+                backgroundColor: MaterialStateProperty.all(
+                    Colors.grey[300]), // <-- Button color
+                overlayColor:
+                    MaterialStateProperty.resolveWith<Color?>((states) {
+                  if (states.contains(MaterialState.pressed))
+                    return Colors.blue[100]; // <-- Splash color
+                }),
+              ),
+            ),
+          ),
+        ),
+        //  ),
+      ),
+    );
+  }
+
+  Widget customcard3(String langname, String imagepath, String route) {
+    return Padding(
+      padding: EdgeInsets.all(5.0),
+      child: InkWell(
+        child: Card(
+          //το wdiget Card
+          color: Colors.white,
+          elevation: 10.0, //η σκια που θελουμε να φαινεται
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ), //στρογγυλοποιηση γωνιών της κάρτας
+          child: ListTile(
+            contentPadding:
+                EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+            iconColor: Colors.black,
+            leading: Image(
+              width: 40, //να γεμιζει η εικονα τον χωρο
+              image: AssetImage(imagepath), //δυναμικο path εικονας
+            ),
+            title: Text(
+              langname,
+              style:
+                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+            ),
+            trailing: Text(
+              route,
+              style: TextStyle(color: Colors.black),
+            ),
+          ),
+        ),
+        //  ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[800],
+      backgroundColor: Colors.grey[400],
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -110,7 +193,7 @@ class _HomePageState extends State<HomePage> {
               'Hello World',
               style: TextStyle(
                   fontSize: 24,
-                  color: Colors.white,
+                  color: Colors.black,
                   fontWeight: FontWeight.bold),
             ),
           ),
@@ -123,9 +206,9 @@ class _HomePageState extends State<HomePage> {
                 customcard("Heartbeat", "66", "bpm", Icons.heart_broken,
                     Colors.blueAccent, '/cardpageheartbeat'),
                 customcard("Blood Pressure", '66/123', 'mm', Icons.bloodtype,
-                    Colors.amberAccent, '/cardpagejava'),
+                    Colors.amberAccent, '/cardpageblood'),
                 customcard("Activity", "6783", "steps", Icons.local_activity,
-                    Colors.pink, '/cardpagejavascript'),
+                    Colors.pink, '/cardpageactivity'),
               ],
             ),
           ),
@@ -133,22 +216,34 @@ class _HomePageState extends State<HomePage> {
             padding: EdgeInsets.only(top: 30.0),
           ),
           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'YOUR DAILY INFORMATION',
+                '   YOUR DAILY INFORMATION',
                 style: TextStyle(
                     fontSize: 15,
-                    color: Colors.white,
+                    color: Colors.black,
                     fontWeight: FontWeight.bold),
               ),
-              Container(
-                child: Card(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [],
-                  ),
-                ),
-              )
+              customcard2(
+                  "Cardiotoxicity articles", 'assets/images/articles.png', '/'),
+            ],
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: 30.0),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '   SCHEDULED ACTIVITIES',
+                style: TextStyle(
+                    fontSize: 15,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold),
+              ),
+              customcard3("Walking", 'assets/images/walking.png', '750 steps'),
+              customcard3("Swimming", 'assets/images/swimming.png', '30 mins'),
             ],
           ),
         ],

@@ -12,9 +12,8 @@ void main() {
       '/homepage': (context) => HomePage(),
       '/splashscreen': (context) => SplashScreen(),
       '/cardpageheartbeat': (context) => CardPageHeartbeat(),
-      // '/cardpagejava': (context) => CardPageJava(),
-      // '/cardpagecpp': (context) => CardPageCpp(),
-      // '/cardpagejavascript': (context) => CardPageJavascript(),
+      '/cardpageblood': (context) => CardPageBlood(),
+      '/cardpageactivity': (context) => CardPageActivity(),
     },
   ));
 }
