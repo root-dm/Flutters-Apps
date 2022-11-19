@@ -8,18 +8,11 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  var yourList = [
-    "first item",
-    "second item",
-    "third item"
-  ]; //το κειμενο του splash screen\
   int randomIndex = 0;
   //δημιουργει ενα τυχαιο αριθμο απο το length της λιστας
   @override
   void initState() {
     super.initState();
-    randomIndex =
-        Random().nextInt(yourList.length); //πριν την build οριζουμε το στοιχειο
     Timer(Duration(seconds: 3), () {
       //μετα απο τρια δευτερολεπτα καλειται ο Navigator
       Navigator.pushNamed(
@@ -35,12 +28,14 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.indigo,
+      backgroundColor: Colors.black,
       body: Center(
-        child: Text(yourList[randomIndex],
-            style: TextStyle(
-              fontSize: 45,
-            )),
+        child: Image(
+          fit: BoxFit.contain, //να γεμιζει η εικονα τον χωρο
+          width: 100,
+          image: AssetImage(
+              'assets/images/amalie-steiness.gif'), //δυναμικο path εικονας
+        ),
       ),
     );
   }

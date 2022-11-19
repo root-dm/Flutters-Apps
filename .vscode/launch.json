@@ -1,0 +1,188 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "assigment1",
+            "cwd": "assigment1",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "assigment1 (profile mode)",
+            "cwd": "assigment1",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "assigment1 (release mode)",
+            "cwd": "assigment1",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "assigment_math",
+            "cwd": "assigment_math",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "assigment_math (profile mode)",
+            "cwd": "assigment_math",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "assigment_math (release mode)",
+            "cwd": "assigment_math",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "assignment1--petran",
+            "cwd": "assignment1--petran",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "assignment1--petran (profile mode)",
+            "cwd": "assignment1--petran",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "assignment1--petran (release mode)",
+            "cwd": "assignment1--petran",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "ergastirio5",
+            "cwd": "ergastirio5",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "ergastirio5 (profile mode)",
+            "cwd": "ergastirio5",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "ergastirio5 (release mode)",
+            "cwd": "ergastirio5",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "flutter_application_1",
+            "cwd": "flutter_application_1",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "flutter_application_1 (profile mode)",
+            "cwd": "flutter_application_1",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "flutter_application_1 (release mode)",
+            "cwd": "flutter_application_1",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "test_app",
+            "cwd": "test_app",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "test_app (profile mode)",
+            "cwd": "test_app",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "test_app (release mode)",
+            "cwd": "test_app",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "navbar",
+            "cwd": "navbar\\navbar",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "navbar (profile mode)",
+            "cwd": "navbar\\navbar",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "navbar (release mode)",
+            "cwd": "navbar\\navbar",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "petran",
+            "cwd": "petran\\petran",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "petran (profile mode)",
+            "cwd": "petran\\petran",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "petran (release mode)",
+            "cwd": "petran\\petran",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "stateful",
+            "cwd": "statefull\\stateful",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "stateful (profile mode)",
+            "cwd": "statefull\\stateful",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "stateful (release mode)",
+            "cwd": "statefull\\stateful",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        }
+    ]
+}

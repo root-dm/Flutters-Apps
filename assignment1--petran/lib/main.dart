@@ -12,10 +12,9 @@ void main() {
 
       '/splashscreen': (context) => SplashScreen(),
       '/homepage': (context) => HomePage(),
-      '/cardpagepython': (context) => CardPagePython(),
-      '/cardpagejava': (context) => CardPageJava(),
-      '/cardpagecpp': (context) => CardPageCpp(),
-      '/cardpagejavascript': (context) => CardPageJavascript(),
+      '/cardpageheartbeat': (context) => CardPageHeartbeat(),
+      '/cardpageblood': (context) => CardPageBlood(),
+      '/cardpageactivity': (context) => CardPageActivity(),
     },
   ));
 }
