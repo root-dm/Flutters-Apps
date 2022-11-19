@@ -16,9 +16,10 @@ class _HomePageState extends State<HomePage> {
     'assets/images/cpp.png'
   ];
 
-  Widget customcard(String langname, String imagepath, String route) {
+  Widget customcard(IconData iconn, String titlee, String nums, String desc,
+      String route, Color colorr) {
     return Padding(
-      padding: EdgeInsets.all(10.0),
+      padding: EdgeInsets.all(2.0),
       child: InkWell(
         onTap: () {
           Navigator.of(context).pushNamed(route);
@@ -33,7 +34,7 @@ class _HomePageState extends State<HomePage> {
         },
         child: Card(
           //το wdiget Card
-          color: Colors.blue,
+          color: colorr,
           elevation: 10.0, //η σκια που θελουμε να φαινεται
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(25),
@@ -42,17 +43,19 @@ class _HomePageState extends State<HomePage> {
             width: 170,
             child: Column(
               children: [
+                Padding(padding: EdgeInsets.symmetric(vertical: 10.0)),
                 Center(
                     child: Row(
                   children: [
+                    Padding(padding: EdgeInsets.only(left: 10.0)),
                     Icon(
-                      Icons.android,
+                      iconn,
                       size: 20,
                       color: Colors.white,
                     ),
                     Center(
                       child: Text(
-                        langname, //δυναμικο κειμενο εικονας
+                        titlee, //δυναμικο κειμενο εικονας
                         style: TextStyle(
                             fontSize: 14,
                             color: Colors.white,
@@ -62,9 +65,22 @@ class _HomePageState extends State<HomePage> {
                   ],
                 )),
                 Container(
-                  padding: EdgeInsets.all(20.0),
+                  padding: EdgeInsets.all(10.0),
                   child: Text(
-                    "Python is one of the most popular and fastest programming language in the last decade......",
+                    nums,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 40.0,
+                      color: Colors.white,
+                    ),
+                    maxLines: 5,
+                    textAlign: TextAlign.justify,
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.all(3.0),
+                  child: Text(
+                    desc,
                     style: TextStyle(
                       fontSize: 18.0,
                       color: Colors.white,
@@ -85,18 +101,68 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        height: 220,
-        child: ListView(
-          scrollDirection: Axis.horizontal,
+        backgroundColor: Color.fromARGB(255, 222, 221, 221),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            customcard("Heartbeat", listImages[0],
-                '/cardpagepython'), //περναμε τιτλο και εικονα απο την λιστα
-            customcard("Blood pressure", listImages[1], '/cardpagejava'),
-            customcard("Activity", listImages[2], '/cardpagejavascript'),
+            Padding(padding: EdgeInsets.only(top: 25.0)),
+            Text(
+              'Hello Pattient',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 30.0,
+                color: Colors.black,
+              ),
+            ),
+            Container(
+              height: 160,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: [
+                  customcard(
+                      Icons.heart_broken_sharp,
+                      "Heartbeat",
+                      "66",
+                      "bpm",
+                      '/cardpagepython',
+                      Colors
+                          .redAccent), //περναμε τιτλο και εικονα απο την λιστα
+                  customcard(Icons.bloodtype, "Blood Pressure", "66/123",
+                      "mmHg", '/cardpagepython', Colors.cyanAccent),
+                  customcard(Icons.do_not_step, "Activity", "6783", "step",
+                      '/cardpagepython', Colors.orangeAccent),
+                ],
+              ),
+            ),
+            Padding(padding: EdgeInsets.only(top: 20.0)),
+            Text(
+              'YOUR DAILY INFORMATION',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 17.0,
+                color: Colors.black54,
+              ),
+            ),
+            FittedBox(
+              //height: 200,
+              //width: 8555,
+              child: customcard(
+                  Icons.heart_broken_sharp,
+                  "Heartbeat",
+                  "66",
+                  "bpm",
+                  '/cardpagepython',
+                  Colors.redAccent), //περναμε τιτλο και εικονα απο την λιστα
+            ),
+            Text(
+              'YOUR DAILY INFORMATION',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 17.0,
+                color: Colors.black54,
+              ),
+            ),
           ],
-        ),
-      ),
-    );
+        ));
   }
 }
