@@ -1,0 +1,22 @@
+[
+  {
+    "name": "Pizza da Mario",
+    "cuisine": "Italian",
+    "reviews": [
+      {
+        "score": 4.5,
+        "review": "The pizza was amazing!"
+      }
+    ]
+  },
+  {
+    "name": "Pizza Alfonso",
+    "cuisine": "Italian",
+    "reviews": [
+      {
+        "score": 5.0,
+        "review": "Very friendly staff, excellent service!"
+      }
+    ]
+  }
+]
