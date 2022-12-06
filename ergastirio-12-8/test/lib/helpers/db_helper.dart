@@ -12,7 +12,7 @@ class DBHelper {
   static Future _createDB(db, version) {
     return db.execute('''
         CREATE TABLE notes(
-          id INTEGER PRIMARY KEY AUTO INCREMENT,
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
           title TEXT NOT NULL, 
           text TEXT NOT NULL,
           extra TEXT)''');
@@ -26,6 +26,6 @@ class DBHelper {
 
   static Future<List<Map<String, dynamic>>> getData(String table) async {
     final db = await DBHelper.database();
-    return db.query(table);
+    return db.query(table, where: "title LIKE %note%");
   }
 }

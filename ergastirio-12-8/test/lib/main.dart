@@ -5,6 +5,9 @@ void main() {
   runApp(const MyApp());
 }
 
+final _formKey = GlobalKey<FormState>();
+TextEditingController textController = TextEditingController(text: 'note');
+
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
@@ -34,7 +37,11 @@ class _MyAppState extends State<MyApp> {
           primarySwatch: Colors.blue,
         ),
         home: Column(
-          children: [Text('awd'), Text("adwwad")],
+          children: [
+            ElevatedButton(
+                onPressed: databaseInsert, child: Text('Insert Data')),
+            ElevatedButton(onPressed: fetchData, child: Text('Fetch Data')),
+          ],
         ));
   }
 }
