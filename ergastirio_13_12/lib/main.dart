@@ -1,4 +1,3 @@
-import 'package:database/form_example.dart';
 import 'package:database/helpers/db_helpers.dart';
 import 'package:flutter/material.dart';
 
@@ -19,16 +18,21 @@ class MyApp extends StatefulWidget {
 
 class MyAppState extends State<MyApp> {
   Future<void> fetchAndSetData() async {
-    final datalist = await DBHelper.getData("notes");
+    final datalist = await DBHelper.getData("demographics");
     print(datalist);
   }
 
-  databaseInsert() {
-    DBHelper.insert('notes', {
-      'title': 'my note',
-      'text': 'this is dummy text',
-      'extra': 'extra details'
-    });
+  final _formKey = GlobalKey<FormState>();
+
+  TextEditingController nameController = TextEditingController(text: "Name");
+  TextEditingController surnameController =
+      TextEditingController(text: "Surname");
+  TextEditingController ageController = TextEditingController(text: "Age");
+
+  databaseInsert(String name, String surname, String age) {
+    print(name + " " + surname + " " + age);
+    DBHelper.insert(
+        'demographics', {'name': name, 'surname': surname, 'age': age});
   }
 
   @override
@@ -38,15 +42,79 @@ class MyAppState extends State<MyApp> {
       body: Center(
         child: Column(
           children: [
-            ElevatedButton(
-              onPressed: databaseInsert,
-              child: Text("Insert"),
-            ),
+            // ElevatedButton(
+            //   onPressed: databaseInsert,
+            //   child: Text("Insert"),
+            // ),
             ElevatedButton(
               onPressed: fetchAndSetData,
               child: Text("Print data"),
             ),
-            const MyCustomForm(),
+            Container(
+                width: 300,
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextFormField(
+                        controller:
+                            nameController, //χρησιμοποιουμε τον controller ωστε να μπορουμε να παρουμε την τιμη του καθε πεδιου οταν γινεται submit η φορμα
+                        //initialValue: "Some text", το initial value δεν μπορει να χρησιμοποιηθει μαζι με την επιλογη controller
+                        // The validator receives the text that the user has entered.
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter some text';
+                          }
+                          return null;
+                        },
+                      ),
+                      TextFormField(
+                        controller:
+                            surnameController, //χρησιμοποιουμε τον controller ωστε να μπορουμε να παρουμε την τιμη του καθε πεδιου οταν γινεται submit η φορμα
+                        //initialValue: "Some text", το initial value δεν μπορει να χρησιμοποιηθει μαζι με την επιλογη controller
+                        // The validator receives the text that the user has entered.
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter some text';
+                          }
+                          return null;
+                        },
+                      ),
+                      TextFormField(
+                        controller:
+                            ageController, //χρησιμοποιουμε τον controller ωστε να μπορουμε να παρουμε την τιμη του καθε πεδιου οταν γινεται submit η φορμα
+                        //initialValue: "Some text", το initial value δεν μπορει να χρησιμοποιηθει μαζι με την επιλογη controller
+                        // The validator receives the text that the user has entered.
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter some text';
+                          }
+                          return null;
+                        },
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 16.0),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            // Validate returns true if the form is valid, or false otherwise.
+                            if (_formKey.currentState!.validate()) {
+                              databaseInsert(nameController.text,
+                                  surnameController.text, ageController.text);
+                              // Αν η φορμα ειναι valid τυπωσε ενα snackbar (στο κατω μερος της εφαρμογης εμφανιζεται μια μαυρη μπαρα με το κειμενο)
+                              // συνηθως εδω σε πραγματικες εφαρμογες σωνονται οι πληροφοριες στην βαση
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text('Processing Data')),
+                              );
+                            }
+                          },
+                          child: const Text('Submit'),
+                        ),
+                      ),
+                    ],
+                  ),
+                )),
           ],
         ),
       ),
