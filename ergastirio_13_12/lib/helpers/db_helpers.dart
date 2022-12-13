@@ -32,8 +32,12 @@ class DBHelper {
           age TEXT NOT NULL)'''); //επιστρεφει ενα future και με το return ενημερωνει ποτε επιστρεφεται το future
   }
 
-  static Future<List<Map<String, dynamic>>> getData(table) async {
+  static Future<List<Map<String, dynamic>>> getData(table, data1, data2) async {
     final db = await DBHelper.database();
-    return db.query(table); //επιστρεφει μια λιστα απο maps
+    return db.rawQuery("SELECT * FROM demographics WHERE name='" +
+        data1 +
+        "' and surname='" +
+        data2 +
+        "'"); //επιστρεφει μια λιστα απο maps
   }
 }
