@@ -45,4 +45,20 @@ class DBHelper {
     final db = await DBHelper.database();
     return db.rawQuery("Select * FROM users"); //επιστρεφει μια λιστα απο maps
   }
+
+  static Future<int> updateItem(int id, String name, String surname,
+      String weight, String username, String password, String email) async {
+    final db = await DBHelper.database();
+    final data = {
+      'name': name,
+      'surname': surname,
+      'weight': weight,
+      'username': username,
+      'password': password,
+      'email': email
+    };
+    final result =
+        await db.update('users', data, where: "id=?", whereArgs: [id]);
+    return result;
+  }
 }

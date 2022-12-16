@@ -287,7 +287,7 @@ class _MyCustomFormState extends State<MyCustomForm> {
                   controller: emailController,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
-                    labelText: 'Email',
+                    hintText: 'Email',
                   ),
                   // The validator receives the text that the user has entered.
                   validator: (value) {

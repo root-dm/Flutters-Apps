@@ -1,3 +1,4 @@
+import 'package:database/helpers/db_helpers.dart';
 import 'package:flutter/material.dart';
 import 'signup.dart';
 import 'homepage.dart';
@@ -15,46 +16,48 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        body: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Text(
-                "Sign In",
-                style: TextStyle(
-                    fontSize: 24,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Text(
+                  "Sign In",
+                  style: TextStyle(
+                      fontSize: 24,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold),
+                ),
               ),
-            ),
 //
-            const MyCustomForm(),
+              const MyCustomForm(),
 //
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Text(
-                "Do you have an Account ? ",
-                style: TextStyle(
-                    fontSize: 24,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Text(
+                  "Do you have an Account ? ",
+                  style: TextStyle(
+                      fontSize: 24,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold),
+                ),
               ),
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color.fromARGB(199, 241, 111, 231),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color.fromARGB(199, 241, 111, 231),
+                ),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const SignupPage()));
+                },
+                child: const Text(
+                  'SignUp',
+                ),
               ),
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const SignupPage()));
-              },
-              child: const Text(
-                'SignUp',
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -78,8 +81,14 @@ class _MyCustomFormState extends State<MyCustomForm> {
 
   final _formKey = GlobalKey<FormState>();
 
-  TextEditingController textController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
+  final result = String;
+
+  test() {
+    DBHelper.test(result);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +101,7 @@ class _MyCustomFormState extends State<MyCustomForm> {
           Container(
             width: 250,
             child: TextFormField(
-              controller: textController,
+              controller: usernameController,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Username',
@@ -114,7 +123,7 @@ class _MyCustomFormState extends State<MyCustomForm> {
                 width: 250,
                 child: TextFormField(
                   obscureText: true, // gia na min fainetai to password
-                  controller: emailController,
+                  controller: passwordController,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Password',
@@ -141,17 +150,20 @@ class _MyCustomFormState extends State<MyCustomForm> {
               onPressed: () {
                 // Validate returns true if the form is valid, or false otherwise.
                 if (_formKey.currentState!.validate()) {
-                  print(emailController
-                      .text); //απλα τυπωνουμε τις τιμες που εγραψε ο χρηστης στα πεδια
-                  print(textController.text);
-                  // Αν η φορμα ειναι valid τυπωσε ενα snackbar (στο κατω μερος της εφαρμογης εμφανιζεται μια μαυρη μπαρα με το κειμενο)
-                  // συνηθως εδω σε πραγματικες εφαρμογες σωνονται οι πληροφοριες στην βαση
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Processing Data')),
-                  );
+                  print(passwordController.text);
+                  print(usernameController.text);
+                  if (result == true) {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const HomePage()));
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          content: Text('Wrong Username or Password')),
+                    );
+                  }
                 }
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const HomePage()));
               },
               child: const Text(
                 'Submit',
