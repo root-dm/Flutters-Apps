@@ -18,12 +18,11 @@ class _HomeScreenState extends State<HomeScreen> {
             body: Center(child: Text("Database Functions")),
             drawer: Drawer(
               child: ListView(
-                // Important: Remove any padding from the ListView.
                 padding: EdgeInsets.zero,
                 children: [
                   const DrawerHeader(
                     decoration: BoxDecoration(
-                      color: Color.fromARGB(198, 87, 77, 231),
+                      color: Color.fromARGB(255, 117, 150, 187),
                     ),
                     child: Text(
                       'Menu',
@@ -62,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 style: TextStyle(color: Colors.black),
               ),
               iconTheme: IconThemeData(color: Colors.black),
-              backgroundColor: Color.fromARGB(198, 87, 77, 231),
+              backgroundColor: Color.fromARGB(255, 117, 150, 187),
             )));
   }
 }

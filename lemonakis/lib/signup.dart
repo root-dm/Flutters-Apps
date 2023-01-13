@@ -83,7 +83,7 @@ class _MyCustomFormState extends State<MyCustomForm> {
       {
         'name': nameController.text,
         'surname': surnameController.text,
-        'date': birthdateController.text,
+        'birthdate': birthdateController.text,
         'gender': dropdownvalue,
         'weight': weightController.text,
         'username': usernameController.text,
@@ -91,11 +91,6 @@ class _MyCustomFormState extends State<MyCustomForm> {
         'email': emailController.text,
       },
     );
-  }
-
-  Future<void> fetchAndSetData() async {
-    final datalist = await DBHelper.getData("users");
-    print(datalist);
   }
 
   @override
@@ -322,7 +317,6 @@ class _MyCustomFormState extends State<MyCustomForm> {
                     const SnackBar(content: Text('Processing Data')),
                   );
                   databaseInsert();
-                  fetchAndSetData();
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => const MyApp()));
                 }

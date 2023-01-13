@@ -84,12 +84,6 @@ class _MyCustomFormState extends State<MyCustomForm> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
-  final result = String;
-
-  test() {
-    DBHelper.test(result);
-  }
-
   @override
   Widget build(BuildContext context) {
     // Build a Form widget using the _formKey created above.
@@ -147,21 +141,20 @@ class _MyCustomFormState extends State<MyCustomForm> {
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                   backgroundColor: Color.fromARGB(199, 241, 111, 231)),
-              onPressed: () {
+              onPressed: () async {
                 // Validate returns true if the form is valid, or false otherwise.
                 if (_formKey.currentState!.validate()) {
-                  print(passwordController.text);
-                  print(usernameController.text);
-                  if (result == true) {
+                  final user = await DBHelper.testLogin('users',
+                      usernameController.text, passwordController.text);
+                  print(user);
+                  if (!user.isEmpty) {
+                    print('Login successful');
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const HomePage()));
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                          content: Text('Wrong Username or Password')),
+                      context,
+                      MaterialPageRoute(builder: (context) => HomePage(user)),
                     );
+                  } else {
+                    print('Login failed');
                   }
                 }
               },

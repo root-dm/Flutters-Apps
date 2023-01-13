@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:database/helpers/db_helpers.dart';
-import 'package:sqflite/sqflite.dart' as sql;
 import 'usersinfo.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  final List user;
+  const HomePage(this.user);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -15,6 +14,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return MaterialApp(
         home: Scaffold(
+            body: Center(child: Text("Database Functions")),
             drawer: Drawer(
               child: ListView(
                 // Important: Remove any padding from the ListView.
@@ -22,12 +22,12 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   const DrawerHeader(
                     decoration: BoxDecoration(
-                      color: Color.fromARGB(199, 241, 111, 231),
+                      color: Color.fromARGB(198, 87, 77, 231),
                     ),
                     child: Text(
                       'Menu',
                       style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 36),
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
                     ),
                   ),
                   ListTile(
@@ -36,20 +36,20 @@ class _HomePageState extends State<HomePage> {
                         Container(
                           height: 20,
                           width: 20,
-                          child: ClipOval(
-                            child: Image(
-                              image: AssetImage("assets/image/man.png"),
-                            ),
+                          child: Icon(
+                            Icons.person,
+                            color: Colors.black,
                           ),
                         ),
-                        const Text('  Demographics'),
+                        Padding(padding: EdgeInsets.only(left: 15, top: 50)),
+                        const Text('Demographics'),
                       ],
                     ),
                     onTap: () {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const userInfo()));
+                              builder: (context) => UserInfo(widget.user)));
                     },
                   )
                 ],
@@ -61,7 +61,7 @@ class _HomePageState extends State<HomePage> {
                 style: TextStyle(color: Colors.black),
               ),
               iconTheme: IconThemeData(color: Colors.black),
-              backgroundColor: Color.fromARGB(199, 241, 111, 231),
+              backgroundColor: Color.fromARGB(198, 87, 77, 231),
             )));
   }
 }

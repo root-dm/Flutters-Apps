@@ -9,56 +9,48 @@ class DBHelper {
     final dbPath = await sql
         .getDatabasesPath(); //to path αναλογα android/iOS επιστρεφει ενα future γιαυτο εχουμε βαλει το await.
     return sql.openDatabase(
-      path.join(dbPath, 'mydb.db'),
+      path.join(dbPath, 'assigment7.db'),
       version: 1,
       onCreate: _createDB,
     ); //αν υπαρχει το αρχειο ανοιγει την βαση διαφορετικα την δημιουργει
   }
 
   static Future<void> insert(String table, Map<String, Object> data) async {
-    print(data); //τυπωνω τα δεδομένα για να δω οτι ειναι σωστά
     final db = await DBHelper.database();
-    db.insert(table, data, conflictAlgorithm: sql.ConflictAlgorithm.ignore);
+    var insert = await db.insert(table, data,
+        conflictAlgorithm: sql.ConflictAlgorithm.ignore);
     //με το await εδω περιμενουμε να τελειωσουν ολες οι διαδικασιες στην συναρτηση insert
   }
 
+  static Future<List<Map<String, dynamic>>> testLogin(
+      String table, String username, String password) async {
+    final db = await DBHelper.database();
+    return db.rawQuery("SELECT * FROM users WHERE username='" +
+        username +
+        "' and password='" +
+        password +
+        "'"); //επιστρεφει μια λιστα απο maps
+  }
+
+  static Future<void> updater(String table, Map<String, Object> data) async {
+    final db = await DBHelper.database();
+    var update =
+        await db.update(table, data, where: "id = ?", whereArgs: [data['id']]);
+    print(update);
+  }
+
   static Future _createDB(db, version) {
+    print("creating db");
     return db.execute('''
-        CREATE TABLE users(
-          id INTEGER PRIMARY KEY AUTOINCREMENT, 
+        CREATE TABLE users (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
           name TEXT NOT NULL,
-          surname TEXT NOT NULL,
-          date TEXT NOT NULL,
-          gender TEXT NOT NULL,
-          weight TEXT NOT NULL,
-          username TEXT NOT NULL,
-          password TEXT NOT NULL,
+          surname TEXT NOT NULL, 
+          birthdate TEXT NOT NULL, 
+          gender TEXT NOT NULL, 
+          weight TEXT NOT NULL, 
+          username TEXT NOT NULL, 
+          password TEXT NOT NULL, 
           email TEXT NOT NULL)'''); //επιστρεφει ενα future και με το return ενημερωνει ποτε επιστρεφεται το future
-  }
-
-  static Future<List<Map<String, dynamic>>> getData(table) async {
-    final db = await DBHelper.database();
-    return db.query(table); //επιστρεφει μια λιστα απο maps
-  }
-
-  static Future<List<Map<String, dynamic>>> test(table) async {
-    final db = await DBHelper.database();
-    return db.rawQuery("Select * FROM users"); //επιστρεφει μια λιστα απο maps
-  }
-
-  static Future<int> updateItem(int id, String name, String surname,
-      String weight, String username, String password, String email) async {
-    final db = await DBHelper.database();
-    final data = {
-      'name': name,
-      'surname': surname,
-      'weight': weight,
-      'username': username,
-      'password': password,
-      'email': email
-    };
-    final result =
-        await db.update('users', data, where: "id=?", whereArgs: [id]);
-    return result;
   }
 }
