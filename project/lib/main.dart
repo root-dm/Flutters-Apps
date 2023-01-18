@@ -23,7 +23,6 @@ class MyApp extends StatefulWidget {
 class MyAppState extends State<MyApp> {
   testLogin(String username, String password) async {
     final user = await DBHelper.testLogin('users', username, password);
-    print(user);
     if (!user.isEmpty) {
       Navigator.push(
         context,

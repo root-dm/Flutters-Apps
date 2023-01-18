@@ -2,12 +2,17 @@ import 'package:sqflite/sqflite.dart' as sql;
 import 'package:path/path.dart' as path;
 
 class DBHelper {
+  static Future _onConfigure(sql.Database db) async {
+    await db.execute('PRAGMA foreign_keys = ON');
+  }
+
   static Future<sql.Database> database() async {
     final dbPath = await sql.getDatabasesPath();
     return sql.openDatabase(
-      path.join(dbPath, 'assigmentdata.db'),
+      path.join(dbPath, 'assigmentdatanew6.db'),
       version: 1,
       onCreate: _createDB,
+      onConfigure: _onConfigure,
     );
   }
 
@@ -15,6 +20,7 @@ class DBHelper {
     final db = await DBHelper.database();
     var insert = await db.insert(table, data,
         conflictAlgorithm: sql.ConflictAlgorithm.ignore);
+    print (insert);
   }
 
   static Future<List<Map<String, dynamic>>> testLogin(
@@ -27,6 +33,12 @@ class DBHelper {
         "'");
   }
 
+  static Future<List<Map<String, dynamic>>> getData(
+      String table) async {
+    final db = await DBHelper.database();
+    return db.rawQuery("SELECT * FROM "+table);
+  }
+
   static Future<void> updater(String table, Map<String, Object> data) async {
     final db = await DBHelper.database();
     var update =
@@ -35,7 +47,7 @@ class DBHelper {
 
   static Future _createDB(db, version) {
     print("creating db");
-    return db.execute('''
+    db.execute('''
         CREATE TABLE users (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           name TEXT NOT NULL, 
@@ -46,5 +58,16 @@ class DBHelper {
           username TEXT NOT NULL, 
           password TEXT NOT NULL, 
           email TEXT NOT NULL)''');
+
+    return db.execute(
+      '''
+      CREATE TABLE events (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        event TEXT NOT NULL,
+        date TEXT NOT NULL,
+        intersity TEXT NOT NULL,
+        user_id INTEGER NOT NULL,
+        FOREIGN KEY (user_id) REFERENCES users (id))
+    ''');
   }
 }

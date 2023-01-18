@@ -3,6 +3,12 @@ import 'package:flutter/material.dart';
 import './userdata.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import './walkgraph.dart';
+import './heartbeatgraph.dart';
+import './educationmaterial.dart';
+import './add_event.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+
 
 Widget stepscard(String type, String type2, String remaining, String value, String description,
       IconData icon, IconData icon2, Color col, String route, BuildContext context) {
@@ -10,7 +16,17 @@ Widget stepscard(String type, String type2, String remaining, String value, Stri
       padding: const EdgeInsets.all(2.0),
       child: InkWell(
         onTap: () {
-          // Navigator.of(context).pushNamed(route);
+          if (route == "walk") {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => WalkChart()),
+            );
+          } else if (route == "heartbeat") {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => HeartBeatGraph()),
+            );
+          }
         },
         child: Card(
           //το wdiget Card
@@ -154,7 +170,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
   Widget build(BuildContext context) {
 
-    Widget myItems(IconData icon, String heading, Color color) {
+    Widget myItems(IconData icon, String heading, Color color, String route) {
       return Material(
         color: Colors.white,
         elevation: 14.0,
@@ -231,7 +247,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: Text(
                               data,
                               style: TextStyle(
-                                fontSize: 18.0,
+                                fontSize: 14.0,
                                 color: Colors.white,
                               ),
                             ),
@@ -252,7 +268,15 @@ class _HomeScreenState extends State<HomeScreen> {
                         StaggeredGridTile.count(
                           crossAxisCellCount: 1,
                           mainAxisCellCount: 2,
-                          child: myItems(Icons.collections_bookmark_rounded, "Educational\n   Material", Colors.purple),
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => EducationMaterial()),
+                              );
+                            },
+                            child: myItems(Icons.collections_bookmark_rounded, "Educational\n   Material", Colors.purple, "educationmaterial"),
+                          ),
                         ),
                         StaggeredGridTile.count(
                           crossAxisCellCount: 1,
@@ -275,7 +299,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     itemCount: newData == null ? 0 : newData.length,
                                     itemBuilder: (context, index) {
                                       return Container(
-                                        child: stepscard("Walk", 'Phone', "Remaining: "+(8000-newData['activities'][index]['steps']).toString(), newData['activities'][index]['steps'].toString(), "steps", Icons.heart_broken, Icons.phone_android, Colors.purple, '/cardpageheartbeat', context),
+                                        child: stepscard("Walk", 'Phone', "Remaining: "+(8000-newData['activities'][index]['steps']).toString(), newData['activities'][index]['steps'].toString(), "steps", Icons.heart_broken, Icons.phone_android, Colors.purple, 'walk', context),
                                       );
                                     },
                                     scrollDirection: Axis.horizontal,
@@ -313,7 +337,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         itemCount: newData == null ? 0 : newData.length,
                                         itemBuilder: (context, index) {
                                           return Container(
-                                            child: stepscard("HeartBeat", 'Watch', "Avg", average.toStringAsFixed(1), "bpm", Icons.heart_broken, Icons.watch, Colors.blueGrey, '/cardpageheartbeat', context),
+                                            child: stepscard("HeartBeat", 'Watch', "Avg", average.toStringAsFixed(1), "bpm", Icons.heart_broken, Icons.watch, Colors.blueGrey, 'heartbeat', context),
                                           );
                                         },
                                         scrollDirection: Axis.horizontal,
@@ -326,12 +350,28 @@ class _HomeScreenState extends State<HomeScreen> {
                         StaggeredGridTile.count(
                           crossAxisCellCount: 1,
                           mainAxisCellCount: 1,
-                          child: myItems(Icons.settings, "Demographics", Colors.blueAccent),
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => UserData(widget.user)),
+                              );
+                            },
+                            child: myItems(Icons.settings, "Demographics", Colors.blueGrey, "demographics"),
+                          ),                          
                         ),
                         StaggeredGridTile.count(
                           crossAxisCellCount: 1,
                           mainAxisCellCount: 1,
-                          child: myItems(Icons.add, "Add Event", Colors.blue),
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => AddEvent(widget.user)),
+                              );
+                            },
+                            child: myItems(Icons.add, "Add Event", Colors.blue, "addevent"),
+                          ),
                         ),
                       ],
                     ),
@@ -373,7 +413,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => UserData(widget.user)));
+                              builder: (context) => WalkChart()));
                     },
                   ),
                   ListTile(
@@ -395,7 +435,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => UserData(widget.user)));
+                              builder: (context) => HeartBeatGraph()));
                     },
                   ),
                   ListTile(
@@ -417,7 +457,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => UserData(widget.user)));
+                              builder: (context) => EducationMaterial()));
                     },
                   ),
                   ListTile(
@@ -461,7 +501,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => UserData(widget.user)));
+                              builder: (context) => AddEvent(widget.user)));
                     },
                   ),
                 ],
