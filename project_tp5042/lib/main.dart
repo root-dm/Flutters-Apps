@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:database/helpers/db_helpers.dart';
 import 'package:intl/intl.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 List<String> genders = ['male', 'female', 'do not want to declare'];
 
 void main() {
@@ -379,23 +380,30 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  Widget stepscard(String type, String type2, String remaining, String value, String description,
-      IconData icon, IconData icon2, Color col, String route, BuildContext context) {
+  Widget mycardr(String type, String type2, String remaining, String value, String description,
+      IconData icon, IconData icon2, Color col, String route) {
     return Padding(
       padding: const EdgeInsets.all(2.0),
       child: InkWell(
         onTap: () {
           if (route == "walk") {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => walk1()),
+            );
           } else if (route == "heartbeat") {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => heart1()),
+            );
           }
         },
         child: Card(
-          //το wdiget Card
           color: col,
-          elevation: 5.0, //η σκια που θελουμε να φαινεται
+          elevation: 5.0,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
-          ), //στρογγυλοποιηση γωνιών της κάρτας
+          ),
           child: Container(
             width: 150,
             child: Column(
@@ -403,7 +411,7 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 const Padding(
                   padding: EdgeInsets.symmetric(
-                      vertical: 5.0), //συμμετρικη αποσταση στον καθετο αξονα
+                      vertical: 5.0), 
                 ),
                 Row(
                   children: [
@@ -417,7 +425,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     const Spacer(),
                     Text(
-                      type, //δυναμικο κειμενο εικονας
+                      type,
                       style: const TextStyle(
                           fontSize: 20,
                           color: Colors.white,
@@ -486,22 +494,21 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ),
-        //  ),
       ),
     );
   }
 
   final String linkr = "https://api.adviceslip.com/advice";
-  String data = "Loading daily quote please wait...";
+  String rt = "";
   var loadr = true;
 
-  void getJSONData() {
+  void rr() {
     http.get(
         Uri.parse(Uri.encodeFull(linkr)),
         headers: {"Accept": "application/json"}).then((response) {
       setState(() {
-        var dataConvertedToJSON = json.decode(response.body);
-        data = dataConvertedToJSON['slip']['advice'];
+        var dataJson = json.decode(response.body);
+        rt = dataJson['slip']['advice'];
         loadr=false;
       });
     });
@@ -548,9 +555,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    getJSONData();
+    rr();
   }
 
   @override
@@ -569,8 +575,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           begin: Alignment.topRight,
                           end: Alignment.bottomLeft,
                           colors: [
-                            Colors.blue,
-                            Colors.purple,
+                            Colors.green,
+                            Colors.orange,
                           ],
                         )
                       ),
@@ -590,7 +596,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           Padding(padding: const EdgeInsets.only(top: 8.0)),
                           Center(
                             child: Text(
-                              data,
+                              rt,
                               style: TextStyle(
                                 fontSize: 14.0,
                                 color: Colors.white,
@@ -602,13 +608,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ),
-                  //load walking steps and heart rate avg
                   Container(
-                    width: 330,
+                    width: 310,
                     child: StaggeredGrid.count(
                       crossAxisCount: 2,
-                      crossAxisSpacing: 5.0,
-                      mainAxisSpacing: 5.0,
                       children: [
                         StaggeredGridTile.count(
                           crossAxisCellCount: 1,
@@ -617,10 +620,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             onTap: () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => educational()),
+                                MaterialPageRoute(builder: (context) => educ()),
                               );
                             },
-                            child: myItems(Icons.collections_bookmark_rounded, "Educational\n   Material", Colors.purple, "educational"),
+                            child: myItems(Icons.collections_bookmark_rounded, "educ\n   Material", Colors.purple, "educ"),
                           ),
                         ),
                         StaggeredGridTile.count(
@@ -629,22 +632,22 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: Container(
                             child: FutureBuilder(
                               future: DefaultAssetBundle.of(context)
-                                  .loadString('data_repo/response_calories_steps.json'),
+                                  .loadString('data/response_calories_steps.json'),
                               builder: ((context, snapshot) {
                                 if (snapshot.data == null) {
                                   return Container(
                                     child: Center(
-                                      child: Text("Loading..."),
+                                      child: Text(""),
                                     ),
                                   );
                                 } else {
                                   var newData = jsonDecode(snapshot.data.toString());
-
+  
                                   return ListView.builder(
                                     itemCount: newData == null ? 0 : newData.length,
                                     itemBuilder: (context, index) {
                                       return Container(
-                                        child: stepscard("Walk", 'Phone', "Remaining: "+(8000-newData['activities'][index]['steps']).toString(), newData['activities'][index]['steps'].toString(), "steps", Icons.heart_broken, Icons.phone_android, Colors.purple, 'walk', context),
+                                        child: mycardr("walk", "phone", "remaining: "+(8000-newData['activities'][index]['steps']).toString(), newData['activities'][index]['steps'].toString(), "steps", Icons.heart_broken_sharp, Icons.phone_android_rounded, Colors.green, 'walk'),
                                       );
                                     },
                                     scrollDirection: Axis.horizontal,
@@ -661,28 +664,27 @@ class _HomeScreenState extends State<HomeScreen> {
                               Container(
                                 child: FutureBuilder(
                                   future: DefaultAssetBundle.of(context)
-                                      .loadString('data_repo/heartrate.json'),
+                                      .loadString('data/heartrate.json'),
                                   builder: ((context, snapshot) {
                                     if (snapshot.data == null) {
                                       return Container(
                                         child: Center(
-                                          child: Text("Loading..."),
+                                          child: Text(""),
                                         ),
                                       );
                                     } else {
                                       var newData = jsonDecode(snapshot.data.toString());
                                       var result = newData['activities-heart'];
-                                      double average = 0.0;
+                                      double count = 0.0;
                                       for (var i = 0; i < result.length; i++) {
-                                        average = average + newData['activities-heart'][i]['heartRate'];
+                                        count = count + newData['activities-heart'][i]['heartRate'];
                                       }
-                                      average=average/result.length;
 
                                       return ListView.builder(
                                         itemCount: newData == null ? 0 : newData.length,
                                         itemBuilder: (context, index) {
                                           return Container(
-                                            child: stepscard("HeartBeat", 'Watch', "Avg", average.toStringAsFixed(1), "bpm", Icons.heart_broken, Icons.watch, Colors.blueGrey, 'heartbeat', context),
+                                            child: mycardr("HeartBeat", 'Watch', "Avg", (count/result.length).toStringAsFixed(0), "bpm", Icons.heart_broken_sharp, Icons.watch_later, Colors.yellow, 'heartbeat'),
                                           );
                                         },
                                         scrollDirection: Axis.horizontal,
@@ -708,15 +710,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         StaggeredGridTile.count(
                           crossAxisCellCount: 1,
                           mainAxisCellCount: 1,
-                          child: InkWell(
-                            // onTap: () {
-                            //   Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(builder: (context) => educational()),
-                            //   );
-                            // },
-                            child: myItems(Icons.add, "Add Event", Colors.blue, "addevent"),
-                          ),
+                          child: myItems(Icons.add, "Add Event", Colors.blue, "addevent"),
                         ),
                       ],
                     ),
@@ -731,7 +725,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   const DrawerHeader(
                     decoration: BoxDecoration(
-                      color: Color.fromARGB(255, 107, 16, 182),
+                      color: Color.fromARGB(255, 16, 182, 30),
                     ),
                     child: Text(
                       'Menu',
@@ -795,14 +789,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         const Padding(padding: EdgeInsets.only(left: 15, top: 50)),
-                        const Text('Educational Material'),
+                        const Text('educ Material'),
                       ],
                     ),
                     onTap: () {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => educatinal()));
+                              builder: (context) => educ()));
                     },
                   ),
                   ListTile(
@@ -848,7 +842,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             appBar: AppBar(
               iconTheme: const IconThemeData(color: Colors.black),
-              backgroundColor: Color.fromARGB(255, 107, 16, 182),
+              backgroundColor: Color.fromARGB(255, 16, 182, 30),
             )));
   }
 }
@@ -878,7 +872,7 @@ class _UserDataState extends State<UserData> {
     return Scaffold(
         appBar: AppBar(
           title: const Text('User Data'),
-          backgroundColor: Color.fromARGB(255, 231, 37, 37),
+          backgroundColor: Color.fromARGB(255, 16, 182, 30),
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -1047,7 +1041,7 @@ class _UserDataState extends State<UserData> {
                           child: ElevatedButton(
                             style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all<Color>(
-                                  Color.fromARGB(255, 231, 37, 37)),
+                                  Color.fromARGB(255, 16, 182, 30)),
                             ),
                             onPressed: () {
                               if (globalkey.currentState!.validate()) {
@@ -1080,22 +1074,22 @@ class _UserDataState extends State<UserData> {
 }
 
 
-class educational extends StatelessWidget {
-  const educational({super.key});
+class educ extends StatelessWidget {
+  const educ({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          backgroundColor: Color.fromARGB(255, 107, 16, 182),
+          backgroundColor: Color.fromARGB(255, 16, 182, 30),
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {
               Navigator.pop(context);
             },
           ),
-          title: Text('Educational Material'),
+          title: Text('educ Material'),
         ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -1136,13 +1130,13 @@ class _heart1State extends State<heart1> {
     List<ChartData> data = [];
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 107, 16, 182),
+        backgroundColor: Color.fromARGB(255, 16, 182, 30),
         title: Text("Heartbeat"),
         centerTitle: true,
       ),
       body: FutureBuilder(
         future:
-            DefaultAssetBundle.of(context).loadString('data_repo/heartrate.json'),
+            DefaultAssetBundle.of(context).loadString('data/heartrate.json'),
         builder: (context, snapshot) {
           var newData = json.decode(snapshot.data.toString());
           return ListView.builder(
@@ -1187,13 +1181,6 @@ index = index + 1;
   }
 }
 
-class ChartData {
-  final String _dateTime;
-  final int rpm;
-  final Color color;
-  ChartData(this._dateTime, this.rpm, this.color);
-}
-
 
 class walk1 extends StatefulWidget {
   const walk1({Key? key}) : super(key: key);
@@ -1216,15 +1203,15 @@ class _walk1State extends State<walk1> {
 
   @override
   Widget build(BuildContext context) {
-    List<ChartData> data = [];
+    List<ChartData2> data = [];
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 107, 16, 182),
+        backgroundColor: Color.fromARGB(255, 16, 182, 30),
         title: Text("Steps"),
         centerTitle: true,
       ),
       body: FutureBuilder(
-        future: DefaultAssetBundle.of(context).loadString('data_repo/response_calories_steps.json'),
+        future: DefaultAssetBundle.of(context).loadString('data/response_calories_steps.json'),
         builder: (context, snapshot) {
           var newData = json.decode(snapshot.data.toString());
           return ListView.builder(
@@ -1232,7 +1219,7 @@ class _walk1State extends State<walk1> {
             itemBuilder: (BuildContext context, index) {
               List my_objects = newData['activities'];
               for (int i = 0; i < my_objects.length; i++) {
-                data.add(ChartData(newData['activities'][index]['startTime'], newData['activities'][index]['steps'], Colors.black));
+                data.add(ChartData2(newData['activities'][index]['startTime'], newData['activities'][index]['steps'], Colors.black));
                 index = index + 1;
               }
               return Container(
@@ -1245,12 +1232,12 @@ class _walk1State extends State<walk1> {
                     isVisible: true,
                   ),
                   tooltipBehavior: TooltipBehavior(enable: true),
-                  series: <ChartSeries<ChartData, String>>[
-                    LineSeries<ChartData, String>(
+                  series: <ChartSeries<ChartData2, String>>[
+                    LineSeries<ChartData2, String>(
                       dataSource: data,
-                      pointColorMapper: (ChartData data, _) => data.color,
-                      xValueMapper: (ChartData heart, _) => heart._dateTime,
-                      yValueMapper: (ChartData heart, _) => heart.steps,
+                      pointColorMapper: (ChartData2 data, _) => data.color,
+                      xValueMapper: (ChartData2 heart, _) => heart._dateTime,
+                      yValueMapper: (ChartData2 heart, _) => heart.steps,
                       markerSettings:
                           MarkerSettings(isVisible: true, color: Colors.white),
                       color: Colors.black,
@@ -1270,7 +1257,14 @@ class _walk1State extends State<walk1> {
 
 class ChartData {
   final String _dateTime;
+  final int rpm;
+  final Color color;
+  ChartData(this._dateTime, this.rpm, this.color);
+}
+
+class ChartData2 {
+  final String _dateTime;
   final int steps;
   final Color color;
-  ChartData(this._dateTime, this.steps, this.color);
+  ChartData2(this._dateTime, this.steps, this.color);
 }

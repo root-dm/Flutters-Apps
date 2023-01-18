@@ -26,9 +26,8 @@ class _Graph2State extends State<Graph2> {
     List<ChartData> data = [];
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 107, 16, 182),
+        backgroundColor: Color.fromARGB(255, 231, 140, 37),
         title: Text("Steps"),
-        centerTitle: true,
       ),
       body: FutureBuilder(
         future: DefaultAssetBundle.of(context).loadString('data/response_calories_steps.json'),

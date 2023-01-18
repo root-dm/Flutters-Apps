@@ -8,7 +8,7 @@ class education extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          backgroundColor: Color.fromARGB(255, 107, 16, 182),
+          backgroundColor: Color.fromARGB(255, 231, 140, 37),
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {

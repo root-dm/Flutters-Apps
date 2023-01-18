@@ -9,9 +9,48 @@ import './educationmaterial.dart';
 import './add_event.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
+class HomeScreen extends StatefulWidget {
+  // const HomeScreen({Key? key}) : super(key: key);
+  final List user;
+  const HomeScreen(this.user);
 
-Widget stepscard(String type, String type2, String remaining, String value, String description,
-      IconData icon, IconData icon2, Color col, String route, BuildContext context) {
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final String url = "https://api.adviceslip.com/advice";
+  String data = "Loading daily quote please wait...";
+  var isLoading = true; //μεταβλητη που δειχνει αν φορτωνει τα δεδομενα
+
+  void getJSONData() {
+    http.get(
+        // κανουμε encode το url σε περιπτωση που εχει κενα (εδω δεν ισχυει)
+        Uri.parse(Uri.encodeFull(url)),
+        // του λεμε να δεχεται μονο json
+        headers: {"Accept": "application/json"}).then((response) {  //χρησιμοποιουμε το then οταν θελουμε να περιμενουμε να παρει τιμη το future 
+      // το response ειναι ενα object που περιεχει στο body τα δεδομενα
+      print(response);
+
+      // αλλαζουμε το state του widget και ποιο συγκεκριμενα τα data που επηρεαζουν το listview
+      setState(() {
+        var dataConvertedToJSON = json.decode(response.body);
+        data = dataConvertedToJSON['slip']['advice'];
+        isLoading=false; //αλλαζουμε σε false την μεταβλητη που δειχνει τον loader
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getJSONData();
+  }
+  Widget build(BuildContext context) {
+
+Widget myCard(String type, String type2, String remaining, String value, String description,
+      IconData icon, IconData icon2, Color col, String route) {
     return Padding(
       padding: const EdgeInsets.all(2.0),
       child: InkWell(
@@ -129,46 +168,6 @@ Widget stepscard(String type, String type2, String remaining, String value, Stri
       ),
     );
   }
-
-class HomeScreen extends StatefulWidget {
-  // const HomeScreen({Key? key}) : super(key: key);
-  final List user;
-  const HomeScreen(this.user);
-
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  final String url = "https://api.adviceslip.com/advice";
-  String data = "Loading daily quote please wait...";
-  var isLoading = true; //μεταβλητη που δειχνει αν φορτωνει τα δεδομενα
-
-  void getJSONData() {
-    http.get(
-        // κανουμε encode το url σε περιπτωση που εχει κενα (εδω δεν ισχυει)
-        Uri.parse(Uri.encodeFull(url)),
-        // του λεμε να δεχεται μονο json
-        headers: {"Accept": "application/json"}).then((response) {  //χρησιμοποιουμε το then οταν θελουμε να περιμενουμε να παρει τιμη το future 
-      // το response ειναι ενα object που περιεχει στο body τα δεδομενα
-      print(response);
-
-      // αλλαζουμε το state του widget και ποιο συγκεκριμενα τα data που επηρεαζουν το listview
-      setState(() {
-        var dataConvertedToJSON = json.decode(response.body);
-        data = dataConvertedToJSON['slip']['advice'];
-        isLoading=false; //αλλαζουμε σε false την μεταβλητη που δειχνει τον loader
-      });
-    });
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    getJSONData();
-  }
-  Widget build(BuildContext context) {
 
     Widget myItems(IconData icon, String heading, Color color, String route) {
       return Material(
@@ -299,7 +298,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     itemCount: newData == null ? 0 : newData.length,
                                     itemBuilder: (context, index) {
                                       return Container(
-                                        child: stepscard("Walk", 'Phone', "Remaining: "+(8000-newData['activities'][index]['steps']).toString(), newData['activities'][index]['steps'].toString(), "steps", Icons.heart_broken, Icons.phone_android, Colors.purple, 'walk', context),
+                                        child: myCard("Walk", 'Phone', "Remaining: "+(8000-newData['activities'][index]['steps']).toString(), newData['activities'][index]['steps'].toString(), "steps", Icons.heart_broken, Icons.phone_android, Colors.purple, 'walk'),
                                       );
                                     },
                                     scrollDirection: Axis.horizontal,
@@ -316,7 +315,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               Container(
                                 child: FutureBuilder(
                                   future: DefaultAssetBundle.of(context)
-                                      .loadString('data_repo/heartrate.json'),
+                                      .loadString('data/heartrate.json'),
                                   builder: ((context, snapshot) {
                                     if (snapshot.data == null) {
                                       return Container(
@@ -327,17 +326,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                     } else {
                                       var newData = jsonDecode(snapshot.data.toString());
                                       var result = newData['activities-heart'];
-                                      double average = 0.0;
+                                      double count = 0.0;
                                       for (var i = 0; i < result.length; i++) {
-                                        average = average + newData['activities-heart'][i]['heartRate'];
+                                        count = count + newData['activities-heart'][i]['heartRate'];
                                       }
-                                      average=average/result.length;
 
                                       return ListView.builder(
                                         itemCount: newData == null ? 0 : newData.length,
                                         itemBuilder: (context, index) {
                                           return Container(
-                                            child: stepscard("HeartBeat", 'Watch', "Avg", average.toStringAsFixed(1), "bpm", Icons.heart_broken, Icons.watch, Colors.blueGrey, 'heartbeat', context),
+                                            child: myCard("HeartBeat", 'Watch', "Avg", (count/result.length).toStringAsFixed(1), "bpm", Icons.heart_broken, Icons.watch, Colors.blueGrey, 'heartbeat'),
                                           );
                                         },
                                         scrollDirection: Axis.horizontal,

@@ -98,7 +98,7 @@ class LoginState extends State<Login> {
                               style: ButtonStyle(
                                 backgroundColor:
                                     MaterialStateProperty.all<Color>(
-                                        Color.fromARGB(255, 160, 37, 231)),
+                                        Color.fromARGB(255, 231, 140, 37)),
                               ),
                               onPressed: () {
                                 if (_fKey.currentState!.validate()) {
@@ -384,7 +384,7 @@ class FormSignupState extends State<FormSignup> {
               child: ElevatedButton(
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(
-                      Color.fromARGB(255, 160, 37, 231)),
+                      Color.fromARGB(255, 231, 140, 37)),
                 ),
                 onPressed: () {
                   if (_fKey.currentState!.validate()) {

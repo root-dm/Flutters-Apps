@@ -23,9 +23,8 @@ class _Graph1State extends State<Graph1> {
     List<ChartData> data = [];
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 107, 16, 182),
+        backgroundColor: Color.fromARGB(255, 231, 140, 37),
         title: Text("Heartbeat"),
-        centerTitle: true,
       ),
       body: FutureBuilder(
         future:

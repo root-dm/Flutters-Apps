@@ -1,42 +1,64 @@
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
 import './education.dart';
 import './login-register.dart';
-// import './userdata.dart';
 import 'dart:convert';
-import 'package:http/http.dart' as http;
-
 import 'helpers/db_helpers.dart';
 import './graph1.dart';
 import './graph2.dart';
 
+class HomeScreen extends StatefulWidget {
+  final List user;
+  const HomeScreen(this.user);
 
-Widget stepscard(String type, String type2, String remaining, String value, String description,
-      IconData icon, IconData icon2, Color col, String route, BuildContext context) {
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final String link = "https://api.adviceslip.com/advice";
+  String data = "";
+  var loaded = true;
+  void fetch() {
+    http.get(
+        Uri.parse(Uri.encodeFull(link)),
+        headers: {"Accept": "application/json"}).then((response) {
+      setState(() {
+        var json2 = json.decode(response.body);
+        var data2 = json2['slip'];
+        data = data2['advice'];
+        loaded=false;
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetch();
+  }
+  Widget build(BuildContext context) {
+
+    Widget card(String type, String type2, String remaining, String value, String description,
+      IconData icon, IconData icon2, Color col, String route) {
     return Padding(
-      padding: const EdgeInsets.all(2.0),
+      padding: const EdgeInsets.all(3.0),
       child: InkWell(
         onTap: () {
           if (route == "graph2") {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Graph2()),
-            );
+            Navigator.push(context, MaterialPageRoute(builder: (context) => Graph2()),);
           } else if (route == "graph1") {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Graph1()),
-            );
+            Navigator.push(context,MaterialPageRoute(builder: (context) => Graph1()),);
           }
         },
         child: Card(
-          //το wdiget Card
           color: col,
-          elevation: 5.0, //η σκια που θελουμε να φαινεται
+          elevation: 5.0,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
-          ), //στρογγυλοποιηση γωνιών της κάρτας
+            borderRadius: BorderRadius.circular(25),
+          ),
           child: Container(
             width: 150,
             child: Column(
@@ -44,7 +66,7 @@ Widget stepscard(String type, String type2, String remaining, String value, Stri
               children: [
                 const Padding(
                   padding: EdgeInsets.symmetric(
-                      vertical: 5.0), //συμμετρικη αποσταση στον καθετο αξονα
+                      vertical: 5.0),
                 ),
                 Row(
                   children: [
@@ -58,7 +80,7 @@ Widget stepscard(String type, String type2, String remaining, String value, Stri
                     ),
                     const Spacer(),
                     Text(
-                      type, //δυναμικο κειμενο εικονας
+                      type,
                       style: const TextStyle(
                           fontSize: 20,
                           color: Colors.white,
@@ -132,39 +154,6 @@ Widget stepscard(String type, String type2, String remaining, String value, Stri
     );
   }
 
-class HomeScreen extends StatefulWidget {
-  // const HomeScreen({Key? key}) : super(key: key);
-  final List user;
-  const HomeScreen(this.user);
-
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  final String link = "https://api.adviceslip.com/advice";
-  String data = "";
-  var loaded = true;
-  void fetch() {
-    http.get(
-        Uri.parse(Uri.encodeFull(link)),
-        headers: {"Accept": "application/json"}).then((response) {
-      setState(() {
-        var dataConvertedToJSON = json.decode(response.body);
-        data = dataConvertedToJSON['slip']['advice'];
-        loaded=false;
-      });
-    });
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    fetch();
-  }
-  Widget build(BuildContext context) {
-
     Widget myItems(IconData icon, String heading, Color color) {
       return Material(
         color: Colors.white,
@@ -219,8 +208,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           begin: Alignment.topRight,
                           end: Alignment.bottomLeft,
                           colors: [
-                            Color.fromARGB(255, 77, 169, 245),
-                            Color.fromARGB(255, 245, 77, 245),
+                            Color.fromARGB(255, 245, 77, 77),
+                            Color.fromARGB(255, 209, 245, 77),
                           ],
                         )
                       ),
@@ -286,7 +275,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     itemCount: loadeddata == null ? 0 : loadeddata.length,
                                     itemBuilder: (context, index) {
                                       return Container(
-                                        child: stepscard("Walk", 'Phone', "Remaining: "+(8000-loadeddata['activities'][index]['steps']).toString(), loadeddata['activities'][index]['steps'].toString(), "steps", Icons.monitor_heart_outlined, Icons.phone_android_outlined, Colors.pink, 'graph2', context),
+                                        child: card("Walk", 'Phone', "Remaining: "+(8000-loadeddata['activities'][index]['steps']).toString(), loadeddata['activities'][index]['steps'].toString(), "steps", Icons.monitor_heart_outlined, Icons.phone_android_outlined, Colors.red, 'graph2'),
                                       );
                                     },
                                     scrollDirection: Axis.horizontal,
@@ -314,17 +303,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                     } else {
                                       var loadeddata = jsonDecode(snapshot.data.toString());
                                       var result = loadeddata['activities-heart'];
-                                      double average = 0.0;
+                                      double num = 0.0;
                                       for (var i = 0; i < result.length; i++) {
-                                        average = average + loadeddata['activities-heart'][i]['heartRate'];
+                                        num = num + loadeddata['activities-heart'][i]['heartRate'];
                                       }
-                                      average=average/result.length;
-
                                       return ListView.builder(
                                         itemCount: loadeddata == null ? 0 : loadeddata.length,
                                         itemBuilder: (context, index) {
                                           return Container(
-                                            child: stepscard("HeartBeat", 'Watch', "Avg", average.toStringAsFixed(0), "bpm", Icons.monitor_heart_outlined, Icons.watch_later, Colors.blue, 'graph1', context),
+                                            child: card("HeartBeat", 'Watch', "Avg", (num/result.length).toStringAsFixed(0), "bpm", Icons.monitor_heart_outlined, Icons.watch_later, Colors.orange, 'graph1'),
                                           );
                                         },
                                         scrollDirection: Axis.horizontal,
@@ -341,7 +328,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             onTap: () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => UserData(widget.user)),
+                                MaterialPageRoute(builder: (context) => MyUser(widget.user)),
                               );
                             },
                             child: myItems(Icons.settings, "Demographics", Colors.blueGrey),
@@ -373,7 +360,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   const DrawerHeader(
                     decoration: BoxDecoration(
-                      color: Color.fromARGB(255, 107, 16, 182),
+                      color: Color.fromARGB(255, 231, 140, 37),
                     ),
                     child: Text(
                       'Menu',
@@ -397,10 +384,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                     onTap: () {
-                      // Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: (context) => WalkChart()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Graph2()));
                     },
                   ),
                   ListTile(
@@ -419,10 +406,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                     onTap: () {
-                      // Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: (context) => HeartBeatGraph()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Graph1()));
                     },
                   ),
                   ListTile(
@@ -441,10 +428,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                     onTap: () {
-                      // Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: (context) => EducationMaterial()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => education()));
                     },
                   ),
                   ListTile(
@@ -463,10 +450,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                     onTap: () {
-                      // Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: (context) => UserData(widget.user)));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MyUser(widget.user)));
                     },
                   ),
                   ListTile(
@@ -488,7 +475,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     //   Navigator.push(
                     //       context,
                     //       MaterialPageRoute(
-                    //           builder: (context) => UserData(widget.user)));
+                    //           builder: (context) => UrineTrack(widget.user)));
                     // },
                   ),
                 ],
@@ -496,7 +483,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             appBar: AppBar(
               iconTheme: const IconThemeData(color: Colors.black),
-              backgroundColor: Color.fromARGB(255, 107, 16, 182),
+              backgroundColor: Color.fromARGB(255, 231, 140, 37),
             )));
   }
 }
@@ -504,15 +491,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
 List<String> dropdownvalues = ['Male', 'Female', 'Do not want to declare'];
 
-class UserData extends StatefulWidget {
+class MyUser extends StatefulWidget {
   final List loggeddata;
-  const UserData(this.loggeddata);
+  const MyUser(this.loggeddata);
 
   @override
-  State<UserData> createState() => _UserDataState();
+  State<MyUser> createState() => _MyUserState();
 }
 
-class _UserDataState extends State<UserData> {
+class _MyUserState extends State<MyUser> {
   final _fKey = GlobalKey<FormState>();
 
   TextEditingController nController = TextEditingController();
@@ -529,7 +516,7 @@ class _UserDataState extends State<UserData> {
     return Scaffold(
         appBar: AppBar(
           title: const Text('User Data'),
-          backgroundColor: Color.fromARGB(255, 160, 37, 231),
+          backgroundColor: Color.fromARGB(255, 231, 140, 37),
         ),
         body: SingleChildScrollView(
           child: Column(
